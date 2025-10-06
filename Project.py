@@ -170,6 +170,9 @@ mannwhitneyu(data2.trestbps, data2.target, alternative = "two-sided") # H1 (diff
 
 # Test de Student (paramétrique)
 # H0 : Il n'y a pas de différence significative entre la moyenne des deux variables (si p-value > 0,05)
-# H1 : Il y a une différence significative entre la moyenne des deux variables (si p-value < 0,05)
+# H1 : Il y a une différence significative entre la moyenne des deux variables (si p-value < 0,05) l
 from scipy.stats import ttest_ind
-ttest_ind(data2.chol, data2.target) # H1
+ttest_ind(data2.chol, data2.target) # H1 le taux de cholesterol a bien un impact sur la maladie 
+
+# Transformation des variables qualitatives en variables binaires
+data3 = pd.get_dummies(data, drop_first = True)
