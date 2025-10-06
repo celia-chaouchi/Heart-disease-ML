@@ -176,3 +176,53 @@ ttest_ind(data2.chol, data2.target) # H1 le taux de cholesterol a bien un impact
 
 # Transformation des variables qualitatives en variables binaires
 data3 = pd.get_dummies(data, drop_first = True)
+
+# Changement du nom de la colonne target
+data3 = data3.rename(columns = {"target_Oui" : "target"})
+data3.head()
+
+# Séparation du jeu de données en jeu d'entraînement et en jeu de test
+from sklearn.model_selection import train_test_split
+x = data3.iloc[:,0:20] # On sélectionne les variables explicatives (les colonnes autres que target
+y = data3.target # On séléctionne la variable d'intérêt)
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 123)
+# X_train contient les données pour l'entraînement
+# X_test contient les données pour le test
+# y_train et y_test contiennent uniquement la colonne target pour l'entraînement et le test
+
+# Modèle de régression logistique
+from sklearn.linear_model import LogisticRegression
+RegressionLogistique = LogisticRegression(solver = "liblinear")
+RegressionLogistique.fit(X_train, y_train)
+
+# Réaliser des prédictions en utilisant le modèle
+predictions = RegressionLogistique.predict(X_test)
+comparaison = pd.DataFrame({"Valeurs réelles":y_test, "Valeurs prédites":predictions})
+print("Pourcentage de bonnes prédictions : ", RegressionLogistique.score(X_test, y_test).round(4)*100)
+
+# Matrice de confusion
+from sklearn.metrics import confusion_matrix
+print(confusion_matrix(y_test, predictions))
+import scikitplot as skplt
+skplt.metrics.plot_confusion_matrix(y_test, predictions)
+
+# Courbe ROC
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+logit_roc_auc = roc_auc_score(y_test, RegressionLogistique.predict(X_test))
+fpr, tpr, thresholds = roc_curve(y_test, RegressionLogistique.predict_proba(X_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='Logistic Regression (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('Taux de faux positifs')
+plt.ylabel('Taux de vrais positifs')
+plt.title('Courbe ROC des prédictions de la modélisation', fontweight = "bold")
+plt.legend(loc="lower right")
+plt.show()
+
+# Calcul de l'aire sous la courbe
+from sklearn.metrics import auc
+AireCourbe = auc(fpr, tpr)
+print("L'aire sous la courbe est de :", AireCourbe.round(4))
