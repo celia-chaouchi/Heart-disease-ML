@@ -90,3 +90,44 @@ print(data.trestbps.describe().round(2))
 print(data.chol.describe().round(2))
 print(data.thalach.describe().round(2))
 print(data.oldpeak.describe().round(2))
+
+# Création d'une fonction pour créer un histogramme
+def histogramme(variable, couleur, titre_graphique, titre_abcisse):
+    sns.histplot(x = variable, data = data, bins = 9, kde = True, color = couleur)
+    plt.title(titre_graphique, fontsize = 13, fontweight = "bold")
+    plt.xlabel(titre_abcisse, fontsize = 12)
+    plt.ylabel("Effectifs", fontsize = 12)
+    plt.show()
+
+# Application de la fonction
+histogramme("age", "green", "Répartition des patients selon la variable Age", "Age")
+histogramme("trestbps", "darkred", "Répartition des patients selon la tension artérielle au repos", "Tension artérielle au repos (mmHg)")
+histogramme("chol", "goldenrod", "Répartition des patients selon le taux de cholestérol", "Cholestérol (mg/dl)")
+histogramme("thalach", "rosybrown", "Répartition des patients selon la fréquence cardiaque \n maximale atteinte", "Fréquence cardiaque maximale atteinte")
+
+# Création d'une fonction pour créer un diagramme à barres croisées
+def diagramme_barres_croisees(variable_x, variable_y, couleur, titre_legende, titre_graphique, titre_x):
+    sns.countplot(x = variable_x, data = data, hue = variable_y, palette = couleur, order = variable_x.value_counts(ascending = True).index)
+    plt.legend(title = titre_legende)
+    plt.title(titre_graphique, fontsize = 13, fontweight = "bold")
+    plt.xlabel(titre_x, fontsize = 12)
+    plt.ylabel("Effectifs", fontsize = 12)
+    plt.show()
+
+# Application de la fonction
+diagramme_barres_croisees(data.sex, data.target, "Set2", "Maladie cardiovasculaire", "Répartition des patients selon le sexe et la présence de \n maladie cardiovasculaire", "Sexe")
+diagramme_barres_croisees(data.cp, data.target, "RdYlGn_r", "Maladie cardiovasculaire", "Répartition des patients selon la présence de douleurs thoraciques \n et la présence de maladie cardiovasculaire", "Sexe")
+diagramme_barres_croisees(data.fbs, data.target, "Set1", "Maladie cardiovasculaire", "Répartition des patients selon la glycémie à jeun \n et la présence de maladie cardiovasculaire", "Glycémie à jeun")
+
+# Création d'une fonction pour créer des boîtes à moustaches
+def boites_moustaches(variable_x, variable_y, couleur, titre, titre_x, titre_y):
+    sns.boxplot(x = variable_x, y = variable_y, data = data, palette = couleur)
+    plt.title(titre, fontweight = "bold", fontsize = 15)
+    plt.xlabel(titre_x, fontsize = 13)
+    plt.ylabel(titre_y, fontsize = 13)
+    plt.show()
+
+# Application de la fonction
+boites_moustaches(data.target, data.age, couleur = "seismic", titre = "Boîtes à moustaches de la population selon l'âge et la \n présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Age")
+boites_moustaches(data.target, data.trestbps, couleur = "seismic", titre = "Boîtes à moustaches de la population selon la tension artérielle au \n repos (mmHg) et la présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Tension artérielle au repos (mmHg)")
+boites_moustaches(data.target, data.chol, couleur = "seismic", titre = "Boîtes à moustaches de la population selon le taux de cholestérol \n (mg/dl) et la présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Taux de cholestérol (mg/dl)")
