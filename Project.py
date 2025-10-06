@@ -137,3 +137,15 @@ pd.crosstab(data.sex,data.target, margins=True, normalize='index').round(4)*100
 pd.crosstab(data.sex,data.target, margins=True)
 pd.crosstab(data.cp, data.target, margins = True)
 pd.crosstab(data.fbs, data.target, margins = True)
+
+# test du chi 2
+# H0 : Les deux variables sont indépendantes (si p-value > 0,05)
+# H1 : Les deux variables sont dependantes (si p-value < 0,05)
+
+from scipy.stats import chi2_contingency
+chi2_contingency(pd.crosstab(data.sex, data.target))[1] # p-value = 0.000002945 < 0.05
+chi2_contingency(pd.crosstab(data.cp, data.target))[1] # p-value < 0.05
+chi2_contingency(pd.crosstab(data.fbs, data.target))[1] # p-value > 0.05
+
+#Test de Shapiro-Wilk (test entre variable qualitative et quantitative)
+
