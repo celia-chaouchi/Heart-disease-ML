@@ -147,5 +147,23 @@ chi2_contingency(pd.crosstab(data.sex, data.target))[1] # p-value = 0.000002945 
 chi2_contingency(pd.crosstab(data.cp, data.target))[1] # p-value < 0.05
 chi2_contingency(pd.crosstab(data.fbs, data.target))[1] # p-value > 0.05
 
-#Test de Shapiro-Wilk (test entre variable qualitative et quantitative)
+# Test de Shapiro-Wilk (quantitatif VS qualitatif)
+# H0 : L'échantillon suit une distribution normale (si p-value > 0,05)
+# H1 : L'échantillon ne suit pas une distribution normale (si p-value < 0,05)
+from scipy.stats import shapiro
+shapiro(data[data["target"] == "Oui"].age) # H1
+shapiro(data[data["target"] == "Oui"].trestbps) # H1
+shapiro(data[data["target"] == "Oui"].chol) # H0
 
+# Reformatage de la colonne target
+data2 = data.copy(deep = True)
+data2['target'][data2['target'] == "Non"] = 0
+data2['target'][data2['target'] == "Oui"] = 1
+data2['target'] = data2['target'].astype('int64')
+
+# Test de Mann-Whitney (non-paramétrique)
+# H0 : Il n'y a pas de différence significative entre la moyenne des deux variables (si p-value > 0,05)
+# H1 : Il y a une différence significative entre la moyenne des deux variables (si p-value < 0,05)
+from scipy.stats import mannwhitneyu
+mannwhitneyu(data2.age, data2.target, alternative = "two-sided") # H1
+mannwhitneyu(data2.trestbps, data2.target, alternative = "two-sided") # H1
