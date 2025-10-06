@@ -166,4 +166,10 @@ data2['target'] = data2['target'].astype('int64')
 # H1 : Il y a une différence significative entre la moyenne des deux variables (si p-value < 0,05)
 from scipy.stats import mannwhitneyu
 mannwhitneyu(data2.age, data2.target, alternative = "two-sided") # H1
-mannwhitneyu(data2.trestbps, data2.target, alternative = "two-sided") # H1
+mannwhitneyu(data2.trestbps, data2.target, alternative = "two-sided") # H1 (difference non due a l'echantillonnage donc la tension et le status de la maladie sont bien liés)
+
+# Test de Student (paramétrique)
+# H0 : Il n'y a pas de différence significative entre la moyenne des deux variables (si p-value > 0,05)
+# H1 : Il y a une différence significative entre la moyenne des deux variables (si p-value < 0,05)
+from scipy.stats import ttest_ind
+ttest_ind(data2.chol, data2.target) # H1
