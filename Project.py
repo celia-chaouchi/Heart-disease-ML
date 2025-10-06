@@ -131,3 +131,9 @@ def boites_moustaches(variable_x, variable_y, couleur, titre, titre_x, titre_y):
 boites_moustaches(data.target, data.age, couleur = "seismic", titre = "Boîtes à moustaches de la population selon l'âge et la \n présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Age")
 boites_moustaches(data.target, data.trestbps, couleur = "seismic", titre = "Boîtes à moustaches de la population selon la tension artérielle au \n repos (mmHg) et la présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Tension artérielle au repos (mmHg)")
 boites_moustaches(data.target, data.chol, couleur = "seismic", titre = "Boîtes à moustaches de la population selon le taux de cholestérol \n (mg/dl) et la présence d'une maladie cardiovasculaire", titre_x = "Présence d'une maladie cardiovasculaire", titre_y = "Taux de cholestérol (mg/dl)")
+
+#Analyses bivariées 
+pd.crosstab(data.sex,data.target, margins=True, normalize='index').round(4)*100
+pd.crosstab(data.sex,data.target, margins=True)
+pd.crosstab(data.cp, data.target, margins = True)
+pd.crosstab(data.fbs, data.target, margins = True)
