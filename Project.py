@@ -48,4 +48,45 @@ data.sex.value_counts(normalize =True).round (4).mul(100)
 data.cp.value_counts(normalize =True).round (4).mul(100)
 data.fbs.value_counts(normalize =True).round (4).mul(100)
 
+def tableaux(variable, nom_variable):
+    effectifs = variable.value_counts()
+    pourcentages = variable.value_counts(normalize = True).round(4).mul(100)
+    print(pd.concat([effectifs, pourcentages], axis = 1, keys = ['Effectifs', 'Pourcentages (%)'], names = [nom_variable]))
 
+# Application de la fonction pour calculer les effectifs et les pourcentages dans un tableau
+tableaux(data.target, "Maladie")
+tableaux(data.sex, "Sexe des patients")
+tableaux(data.cp, "Douleurs thoraciques")
+tableaux(data.fbs, "Glycémie à jeun")
+
+# Statistiques descriptives pour les variables quantitatives
+print(data.age.describe().round(2))
+print(data.trestbps.describe().round(2))
+print(data.chol.describe().round(2))
+print(data.thalach.describe().round(2))
+print(data.oldpeak.describe().round(2))
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_style("darkgrid")
+
+# Création d'une fonction pour créer un diagramme à barres 
+def diagramme_barres(variable, palette_couleurs, titre_graphique, titre_abcisses):
+    sns.countplot(x = variable, data = data, palette = palette_couleurs, order = variable.value_counts(ascending = True).index)
+    plt.title(titre_graphique, fontweight = "bold")
+    plt.xlabel(titre_abcisses)
+    plt.ylabel("Effectifs")
+    plt.show()
+
+# Application de la fonction
+diagramme_barres(data.target, "bwr_r", "Répartition des patients selon la présence d'une maladie cardiovasculaire", "Présence d'une maladie cardiovasculaire")
+diagramme_barres(data.sex, ("#2a9d8f", "#e9c46a"), "Répartition des patients selon le sexe", "Sexe")
+diagramme_barres(data.cp, "YlOrRd_r", "Répartition des patients selon la présence d'une angine de poitrine", "Angine de poitrine")
+diagramme_barres(data.fbs, "coolwarm_r", "Répartition des patients selon la glycémie à jeun", "Glycémie à jeun")
+
+# Statistiques descriptives pour les variables quantitatives
+print(data.age.describe().round(2))
+print(data.trestbps.describe().round(2))
+print(data.chol.describe().round(2))
+print(data.thalach.describe().round(2))
+print(data.oldpeak.describe().round(2))
